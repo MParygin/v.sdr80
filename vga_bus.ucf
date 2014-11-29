@@ -1,0 +1,11 @@
+NET "RED<0>"   LOC = "R9";
+NET "RED<1>"   LOC = "T8";
+NET "RED<2>"   LOC = "R8";
+NET "GREEN<0>" LOC = "N8";
+NET "GREEN<1>" LOC = "P8";
+NET "GREEN<2>" LOC = "P6";
+NET "BLUE<0>"  LOC = "U5";
+NET "BLUE<1>"  LOC = "U4";
+NET "HSYNC" LOC = "T4";
+NET "VSYNC" LOC = "U3";
+

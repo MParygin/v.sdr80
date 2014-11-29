@@ -1,0 +1,27 @@
+# onBoard USB controller
+NET "FLAGA"   LOC = "V14"; # Bank = 2, Pin name = IP_L23P_2, Type = INPUT, Sch name = U-FLAGA
+NET "FLAGB"   LOC = "U14"; # Bank = 2, Pin name = IP_L23N_2, Type = INPUT, Sch name = U-FLAGB
+#NET "UsbFlag"   LOC = "V16"; # Bank = 2, Pin name = IP, Type = INPUT, Sch name = U-FLAGC
+NET "SLRD"   LOC = "N9"; # Bank = 2, Pin name = IO_L12P_2/D7/GCLK12, Type = DUAL/GCLK, Sch name = U-SLRD
+NET "USBDB<0>"  LOC = "R14"; # Bank = 2, Pin name = IO_L24N_2/A20, Type = DUAL, Sch name = U-FD0
+NET "USBDB<1>"  LOC = "R13"; # Bank = 2, Pin name = IO_L22N_2/A22, Type = DUAL, Sch name = U-FD1
+NET "USBDB<2>"  LOC = "P13"; # Bank = 2, Pin name = IO_L22P_2/A23, Type = DUAL, Sch name = U-FD2
+NET "USBDB<3>"  LOC = "T12"; # Bank = 2, Pin name = IO_L20P_2, Type = I/O, Sch name = U-FD3
+NET "USBDB<4>"  LOC = "N11"; # Bank = 2, Pin name = IO_L18N_2, Type = I/O, Sch name = U-FD4
+NET "USBDB<5>"  LOC = "R11"; # Bank = 2, Pin name = IO, Type = I/O, Sch name = U-FD5
+NET "USBDB<6>"  LOC = "P10"; # Bank = 2, Pin name = IO_L15N_2/D1/GCLK3, Type = DUAL/GCLK, Sch name = U-FD6
+NET "USBDB<7>"  LOC = "R10"; # Bank = 2, Pin name = IO_L15P_2/D2/GCLK2, Type = DUAL/GCLK, Sch name = U-FD7
+
+NET "IFCLK" LOC = "T15" | CLOCK_DEDICATED_ROUTE; # Bank = 2, Pin name = IO/VREF_2, Type = VREF, Sch name = U-IFCLK
+
+NET "SLOE"     LOC = "V15"; # Bank = 2, Pin name = IO_L25P_2/VS2/A19, Type = DUAL, Sch name = U-SLOE
+NET "SLWR"     LOC = "V9";  # Bank = 2, Pin name = IO_L13N_2/D3/GCLK15, Type = DUAL/GCLK, Sch name = U-SWLR
+NET "PKTEND" LOC = "V12"; # Bank = 2, Pin name = IO_L19P_2, Type = I/O, Sch name = U-PKTEND
+
+NET "STMEN"    LOC = "T16"; # Bank = 2, Pin name = IO_L26P_2/VS0/A17, Type = DUAL, Sch name = U-SLCS
+#NET "UsbMode"   LOC = "U15"; # Bank = 2, Pin name = IO_L25N_2/VS1/A18, Type = DUAL, Sch name = U-INT0#
+
+NET "FIFOADR<0>" LOC = "T14"; # Bank = 2, Pin name = IO_L24P_2/A21, Type = DUAL, Sch name = U-FIFOAD0
+NET "FIFOADR<1>" LOC = "V13"; # Bank = 2, Pin name = IO_L19N_2/VREF_2, Type = VREF, Sch name = U-FIFOAD1
+
+#NET "UsbRdy"   LOC = "U13"; # Bank = 2, Pin name = IP, Type = INPUT, Sch name = U-RDY

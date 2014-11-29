@@ -1,0 +1,282 @@
+
+; Base for devices
+
+CONSTANT BASE_VIDEO_DATA,10
+CONSTANT BASE_VIDEO_LOW,11
+CONSTANT BASE_VIDEO_HIGH,12
+CONSTANT BASE_VIDEO_ROW,13
+
+CONSTANT BASE_DDS_LOW,18		; DDS Low half
+CONSTANT BASE_DDS_HIGH,19		; DDS High half
+CONSTANT BASE_DDS_START,1A		; DDS Start
+
+CONSTANT BASE_FRQMTR_CIC,F0	; CIC freq
+CONSTANT BASE_FRQMTR_USB,F4	; USB freq
+CONSTANT BASE_STAT16_ADC,F8	; ADC statistic
+
+
+
+
+; Init DDS 1 kHz
+
+LOAD	s3,21
+LOAD	s2,00
+CALL	F_DDSP
+
+LOAD	s3,50
+LOAD	s2,77
+CALL	F_DDSP
+
+LOAD	s3,40
+LOAD	s2,00
+CALL	F_DDSP
+
+LOAD	s3,20
+LOAD	s2,00
+CALL	F_DDSP
+
+
+lbl:
+
+
+
+
+
+;LOAD		s0,04
+;OUTPUT	s0,BASE_VIDEO_ROW
+
+
+; Out video symbol
+;LOAD		s0,44
+;OUTPUT	s0,BASE_VIDEO_DATA
+
+; Args
+LOAD		s6,BASE_STAT16_ADC
+LOAD		s7,01
+LOAD		s8,41
+LOAD		s9,44
+LOAD		sA,43
+LOAD		sB,20
+CALL		F_STAT16
+
+; Args
+LOAD		s6,BASE_FRQMTR_CIC
+LOAD		s7,06
+LOAD		s8,43
+LOAD		s9,49
+LOAD		sA,43
+LOAD		sB,20
+CALL		F_FRQMTR
+
+; Args
+LOAD		s6,BASE_FRQMTR_USB
+LOAD		s7,07
+LOAD		s8,55
+LOAD		s9,53
+LOAD		sA,42
+LOAD		sB,20
+CALL		F_FRQMTR
+
+
+JUMP		lbl
+
+
+;==============================================================================
+; Out 2 hex digits (s2)
+;==============================================================================
+F_HEX8:
+LOAD		s0,s2
+AND		s0,F0
+SR0		s0
+SR0		s0
+SR0		s0
+SR0		s0
+LOAD		s1,s0
+ADD		s1,30
+COMPARE	s0,0A
+JUMP		C,__l01	
+ADD		s1,07
+__l01:
+OUTPUT	s1,BASE_VIDEO_DATA
+LOAD		s0,s2
+AND		s0,0F
+LOAD		s1,s0
+ADD		s1,30
+COMPARE	s0,0A
+JUMP		C,__l00	
+ADD		s1,07
+__l00:
+OUTPUT	s1,BASE_VIDEO_DATA
+RETURN
+
+
+;==============================================================================
+; Set row & print prefix
+; s8-sB (name), s7 (row)
+;==============================================================================
+F_ROW_PREFIX:
+OUTPUT	s7,BASE_VIDEO_ROW
+OUTPUT	s8,BASE_VIDEO_DATA
+OUTPUT	s9,BASE_VIDEO_DATA
+OUTPUT	sA,BASE_VIDEO_DATA
+OUTPUT	sB,BASE_VIDEO_DATA
+RETURN
+
+;==============================================================================
+; Statistic of ...
+; s8-sB (name), s7 (row), s6 (addr)
+;==============================================================================
+F_STAT16:
+
+; Min
+CALL		F_ROW_PREFIX
+ADD		s7,01
+LOAD		s0,6D
+OUTPUT	s0,BASE_VIDEO_DATA
+LOAD		s0,69
+OUTPUT	s0,BASE_VIDEO_DATA
+LOAD		s0,6E
+OUTPUT	s0,BASE_VIDEO_DATA
+LOAD		s0,3D
+OUTPUT	s0,BASE_VIDEO_DATA
+INPUT		s2,(s6)
+CALL		F_HEX8
+ADD		s6,01
+INPUT		s2,(s6)
+CALL		F_HEX8
+ADD		s6,01
+
+; Max
+CALL		F_ROW_PREFIX
+ADD		s7,01
+LOAD		s0,6D
+OUTPUT	s0,BASE_VIDEO_DATA
+LOAD		s0,61
+OUTPUT	s0,BASE_VIDEO_DATA
+LOAD		s0,78
+OUTPUT	s0,BASE_VIDEO_DATA
+LOAD		s0,3D
+OUTPUT	s0,BASE_VIDEO_DATA
+INPUT		s2,(s6)
+CALL		F_HEX8
+ADD		s6,01
+INPUT		s2,(s6)
+CALL		F_HEX8
+ADD		s6,01
+
+; avg
+CALL		F_ROW_PREFIX
+ADD		s7,01
+LOAD		s0,61
+OUTPUT	s0,BASE_VIDEO_DATA
+LOAD		s0,76
+OUTPUT	s0,BASE_VIDEO_DATA
+LOAD		s0,67
+OUTPUT	s0,BASE_VIDEO_DATA
+LOAD		s0,3D
+OUTPUT	s0,BASE_VIDEO_DATA
+INPUT		s2,(s6)
+CALL		F_HEX8
+ADD		s6,01
+INPUT		s2,(s6)
+CALL		F_HEX8
+ADD		s6,01
+
+; bit
+CALL		F_ROW_PREFIX
+LOAD		s0,62
+OUTPUT	s0,BASE_VIDEO_DATA
+LOAD		s0,69
+OUTPUT	s0,BASE_VIDEO_DATA
+LOAD		s0,74
+OUTPUT	s0,BASE_VIDEO_DATA
+LOAD		s0,3D
+OUTPUT	s0,BASE_VIDEO_DATA
+INPUT		s2,(s6)
+CALL		F_HEX8
+ADD		s6,01
+INPUT		s2,(s6)
+CALL		F_HEX8
+
+RETURN
+
+;==============================================================================
+; s8-sB (name), s7 (row), s6 (addr)
+;==============================================================================
+
+F_FRQMTR:
+CALL		F_ROW_PREFIX
+LOAD		s0,66
+OUTPUT	s0,BASE_VIDEO_DATA
+LOAD		s0,72
+OUTPUT	s0,BASE_VIDEO_DATA
+LOAD		s0,71
+OUTPUT	s0,BASE_VIDEO_DATA
+LOAD		s0,3D
+OUTPUT	s0,BASE_VIDEO_DATA
+INPUT		s2,(s6)
+CALL		F_HEX8
+ADD		s6,01
+INPUT		s2,(s6)
+CALL		F_HEX8
+ADD		s6,01
+INPUT		s2,(s6)
+CALL		F_HEX8
+ADD		s6,01
+INPUT		s2,(s6)
+CALL		F_HEX8
+
+RETURN
+
+;==============================================================================
+; DDS Register out. Low(s2), Hight(s3)
+;==============================================================================
+F_DDS:
+OUTPUT	s2,BASE_DDS_LOW
+OUTPUT	s3,BASE_DDS_HIGH
+OUTPUT   s2,BASE_DDS_START
+RETURN
+
+F_DDS_PAUSE:
+LOAD		s0,s0
+LOAD		s0,s0
+LOAD		s0,s0
+LOAD		s0,s0
+LOAD		s0,s0
+LOAD		s0,s0
+LOAD		s0,s0
+LOAD		s0,s0
+LOAD		s0,s0
+LOAD		s0,s0
+LOAD		s0,s0
+LOAD		s0,s0
+LOAD		s0,s0
+LOAD		s0,s0
+LOAD		s0,s0
+LOAD		s0,s0
+LOAD		s0,s0
+LOAD		s0,s0
+LOAD		s0,s0
+LOAD		s0,s0
+LOAD		s0,s0
+LOAD		s0,s0
+LOAD		s0,s0
+LOAD		s0,s0
+LOAD		s0,s0
+LOAD		s0,s0
+LOAD		s0,s0
+LOAD		s0,s0
+LOAD		s0,s0
+LOAD		s0,s0
+LOAD		s0,s0
+LOAD		s0,s0
+RETURN
+
+F_DDSP:
+CALL		F_DDS
+CALL		F_DDS_PAUSE
+CALL		F_DDS_PAUSE
+CALL		F_DDS_PAUSE
+CALL		F_DDS_PAUSE
+RETURN
+

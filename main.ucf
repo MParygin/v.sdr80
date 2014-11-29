@@ -1,0 +1,3 @@
+// OSC 50 MHz
+NET "CLK50" PERIOD = 20.0ns HIGH 50%;
+NET "CLK50" LOC = "B8";
