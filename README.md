@@ -1,10 +1,11 @@
 #SDR DDC receiver buided on Nexys 2 FPGA board
 
 This project is Software Defined Radio. It builded on FPGA board Nexys 2 with Spartan 3e500 version.
-ADC is 16 bit & 80MHz clock.
+ADC is 16 bit & 80MHz clock ADS5483.
 
 Features:
 
+* ADS5483 ADC 16bit 80MHz
 * True Direct Down Conversion (DDC) receiver
 * Cordic mixer with 0.1 Hz NCO
 * CIC decimation
